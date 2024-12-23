@@ -5,6 +5,7 @@ from sentence_transformers import SentenceTransformer
 import openai
 from collections import defaultdict
 import os
+from flask_cors import CORS
 
 # Load FAISS index and text chunks
 index = faiss.read_index('facstructure.index')
@@ -19,6 +20,9 @@ openai.api_key = os.getenv("OPENAI_API_KEY")
 
 # Initialize Flask
 app = Flask(__name__)
+
+# Enable CORS for all domains (or specify domains if needed)
+CORS(app)
 
 # Track user messages using IP
 user_message_count = defaultdict(int)
