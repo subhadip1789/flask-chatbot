@@ -4,6 +4,7 @@ import json
 from sentence_transformers import SentenceTransformer
 import openai
 from collections import defaultdict
+import os
 
 # Load FAISS index and text chunks
 index = faiss.read_index('facstructure.index')
@@ -13,7 +14,7 @@ with open('text_chunks.json', 'r') as f:
 # Initialize the sentence transformer
 model = SentenceTransformer('all-MiniLM-L6-v2')
 
-import os
+# Set OpenAI API key
 openai.api_key = os.getenv("OPENAI_API_KEY")
 
 # Initialize Flask
@@ -59,9 +60,6 @@ def chat():
     return jsonify({"answer": answer})
 
 if __name__ == '__main__':
-    app.run(debug=True)
-
-from waitress import serve
-from app import app  # assuming your Flask app is in 'app.py'
-
-serve(app, host='0.0.0.0', port=5000)
+    # Use Render's PORT environment variable or default to 5000
+    port = int(os.environ.get("PORT", 5000))
+    app.run(host="0.0.0.0", port=port, debug=True)
